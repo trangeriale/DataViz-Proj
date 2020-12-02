@@ -18,8 +18,6 @@ for i in range(len(part_buttons)):
 
 #choose CPU tab
 
-action.move_to_element(cpu_button).click(cpu_button).perform()
-
 #prepare dataset to rolllll
 UserID = list()
 game_rating = list()
@@ -37,18 +35,26 @@ user_count = 0
 #logic: click on each user
 #rmb to add longer range
 for i in range(100):
+	driver.implicitly_wait(100)
 	driver.refresh()
-	driver.implicitly_wait(20)
+	driver.implicitly_wait(300)
 	#just placeholder to wait till new shit comes up?
-	newest_user_data = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "bglink")))
+	
 	driver.find_element_by_class_name('bglink').click()
 
+	#missing some data -- next
+	red_text = driver.find_elements_by_class_name("sharpredtext")
+	for i in range(len(red_text)):
+		if red_text[i].text.find("missing"):
+			continue
+
+	driver.refresh()
 	#start getting the data
-	copy_button = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CLASS_NAME, "fa-copy")))
+	copy_button = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CLASS_NAME, "fa-copy")))
 	#filtered_list = [i for (i, v) in zip(list_a, filter) if v]
 
 	driver.find_element_by_class_name("fa-copy").click()
-	driver.implicitly_wait(60)
+	driver.implicitly_wait(100)
 
 	#user computer info
 	user_comp_info = driver.find_element_by_id("modalTextArea").text.split('\n')
@@ -69,28 +75,31 @@ for i in range(100):
 	UserID.append(user_ID)
 
 	#there is no missing data for ratings
-	if(len(user_ID_and_rating) < 3):
+	if(user_ID_and_rating[1]=='[/url]'):
+		print("f this")
+		driver.back()
 		continue
-	else:
-		user_game_rating = user_ID_and_rating[2][:-1]
-		#print(user_game_rating)
-		game_rating.append(user_game_rating)
 
-		user_desktop_rating = user_ID_and_rating[4][:-1]
-		#print(user_desktop_rating)
-		desktop_rating.append(user_desktop_rating)
+	user_game_rating = user_ID_and_rating[2][:-1]
+	#print(user_game_rating)
+	game_rating.append(user_game_rating)
 
-		user_work_rating = user_ID_and_rating[6][:-6]
-		work_rating.append(user_work_rating)
+	user_desktop_rating = user_ID_and_rating[4][:-1]
+	#print(user_desktop_rating)
+	desktop_rating.append(user_desktop_rating)
+
+	user_work_rating = user_ID_and_rating[6][:-6]
+	work_rating.append(user_work_rating)
 
 	#user CPU
 	#might not need to find the word CPU but we'll see
 	user_count += 1
 	print("User count is: %d" % user_count)
-	driver.implicitly_wait(20)
+	driver.implicitly_wait(100)
 	driver.back()
-	driver.implicitly_wait(20)
+	driver.implicitly_wait(300)
 	driver.refresh()
+	driver.implicitly_wait(300)
 
 print(user_comp_data['UserID'])
 

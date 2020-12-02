@@ -9,10 +9,18 @@ import nltk
 
 nltk.download('punkt')
 
-driver = webdriver.Chrome(ChromeDriverManager().install())
+#options = webdriver.ChromeOptions()
+#options.add_argument('--ignore-certificate-errors')
+#options.add_argument('--ignore-ssl-errors')
 
-print('hell yea')
+#driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=options)
 
+from webdriver_manager.firefox import GeckoDriverManager
+
+driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
+driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
 driver.get("https://cpu.userbenchmark.com/Software")
 
+
+print('hell yea')

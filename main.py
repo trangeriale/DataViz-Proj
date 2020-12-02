@@ -24,37 +24,33 @@ game_rating = list()
 desktop_rating = list()
 work_rating = list()
 CPU = list()
+CPU_rating = list()
 GPU = list()
+GPU_rating = list()
 SSD = list()
 RAM = list()
 MBD = list()
 
-user_comp_data = {'UserID' : UserID, 'gameRating' : game_rating, 'desktopRating' : desktop_rating , 'workRating' : work_rating, 'CPU' : CPU, 'GPU' : GPU, 'SSD' : SSD, 'RAM' : RAM, 'MBD' : MBD}
-
 user_count = 0
+
 #logic: click on each user
 #rmb to add longer range
-for i in range(100):
-	driver.implicitly_wait(100)
+for i in range(30):
+	driver.implicitly_wait(12000)
 	driver.refresh()
-	driver.implicitly_wait(300)
-	#just placeholder to wait till new shit comes up?
+	driver.implicitly_wait(12000)
 	
 	driver.find_element_by_class_name('bglink').click()
 
-	#missing some data -- next
-	red_text = driver.find_elements_by_class_name("sharpredtext")
-	for i in range(len(red_text)):
-		if red_text[i].text.find("missing"):
-			continue
-
+	driver.implicitly_wait(36000)
 	driver.refresh()
+	driver.implicitly_wait(50000)
 	#start getting the data
-	copy_button = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CLASS_NAME, "fa-copy")))
+	copy_button = WebDriverWait(driver, 10000).until(EC.presence_of_element_located((By.CLASS_NAME, "fa-copy")))
 	#filtered_list = [i for (i, v) in zip(list_a, filter) if v]
 
 	driver.find_element_by_class_name("fa-copy").click()
-	driver.implicitly_wait(100)
+	driver.implicitly_wait(1000)
 
 	#user computer info
 	user_comp_info = driver.find_element_by_id("modalTextArea").text.split('\n')
@@ -65,45 +61,73 @@ for i in range(100):
 
 	#user_ID
 	user_ID_and_rating = user_comp_info[0].split(' ')
-	print(user_ID_and_rating)
+	#print(user_ID_and_rating)
+	#there is missing data for ratings
+	if(user_ID_and_rating[1]=='[/url]'):
+		print("f this")
+		driver.back()
+		continue
+
 
 
 	prefix_ID = '[url=https://www.userbenchmark.com/UserRun/'
 	suffix_ID = ']UserBenchmarks:'
 	
 	user_ID = user_ID_and_rating[0][(len(prefix_ID)):(0-len(suffix_ID))]
+	
 	UserID.append(user_ID)
-
-	#there is no missing data for ratings
-	if(user_ID_and_rating[1]=='[/url]'):
-		print("f this")
-		driver.back()
-		continue
+	print(user_ID)
 
 	user_game_rating = user_ID_and_rating[2][:-1]
-	#print(user_game_rating)
+	print(user_game_rating)
 	game_rating.append(user_game_rating)
 
 	user_desktop_rating = user_ID_and_rating[4][:-1]
-	#print(user_desktop_rating)
+	print(user_desktop_rating)
 	desktop_rating.append(user_desktop_rating)
 
 	user_work_rating = user_ID_and_rating[6][:-6]
+	print(user_work_rating)
 	work_rating.append(user_work_rating)
 
 	#user CPU
-	#might not need to find the word CPU but we'll see
+	user_CPU_string = user_comp_info[1]
+	user_CPU = user_CPU_string[(user_CPU_string.find("]")+1):(user_CPU_string.find("[/url]"))]
+	user_CPU_rating = user_CPU_string[(user_CPU_string.find("[b]") + 3):(user_CPU_string.find("[/b]"))]
+
+	print(user_CPU)
+	print(user_CPU_rating)
+
+	CPU.append(user_CPU)
+	CPU_rating.append(user_CPU_rating)
+
+	#user GPU
+	user_GPU_string = user_comp_info[2]
+	user_GPU = user_GPU_string[(user_GPU_string.find("]")+1):(user_GPU_string.find("[/url]"))]
+	user_GPU_rating = user_GPU_string[(user_GPU_string.find("[b]") + 3):(user_GPU_string.find("[/b]"))]
+	
+	print(user_GPU)
+	print(user_GPU_rating)
+
+	GPU.append(user_GPU)
+	GPU_rating.append(user_GPU_rating)
+
+	#for debugging/tabulating
 	user_count += 1
 	print("User count is: %d" % user_count)
-	driver.implicitly_wait(100)
+	driver.implicitly_wait(12000)
 	driver.back()
-	driver.implicitly_wait(300)
-	driver.refresh()
-	driver.implicitly_wait(300)
+	driver.implicitly_wait(12000)
+	#driver.refresh()
+	#driver.implicitly_wait(3000)
 
-print(user_comp_data['UserID'])
+#even if didn't finish loop that's fine
 
+user_comp_data = {'UserID' : UserID, 'gameRating' : game_rating, 'desktopRating' : desktop_rating , 'workRating' : work_rating, 'CPU' : CPU, 'CPURating': CPU_rating, 'GPU' : GPU, 'GPURating' : GPU_rating}
+comp_dataset = pd.DataFrame(user_comp_data)
 
+print(comp_dataset)
+comp_dataset.to_csv('user_cpu_gpu.csv', mode= 'a', header = False)
 
 
 

@@ -7,7 +7,7 @@ import webdriver_manager
 from webdriver_manager.chrome import ChromeDriverManager
 import nltk
 
-nltk.download('punkt')
+#nltk.download('punkt')
 
 #options = webdriver.ChromeOptions()
 #options.add_argument('--ignore-certificate-errors')

@@ -1,6 +1,0 @@
-[url=https://www.userbenchmark.com/UserRun/36223301]UserBenchmarks: Game 30%, Desk 105%, Work 29%[/url]
-CPU: [url=https://cpu.userbenchmark.com/SpeedTest/516988/IntelR-CoreTM-i7-8086K-CPU---400GHz]Intel Core i7-8086K[/url] - [b]105.9%[/b]
-GPU: [url=https://gpu.userbenchmark.com/Nvidia-GTX-660/Rating/2162]Nvidia GTX 660[/url] - [b]19.6%[/b]
-SSD: [url=https://ssd.userbenchmark.com/SpeedTest/628267/PC-SN520-NVMe-WDC-128GB]PC SN520 NVMe WDC 128GB[/url] - [b]139.7%[/b]
-RAM: [url=https://ram.userbenchmark.com/SpeedTest/114237/Unknown-CL16-18-18-D4-2666-2x8GB]Unknown CL16-18-18 D4-2666 2x8GB[/url] - [b]99.5%[/b]
-MBD: [url=https://www.userbenchmark.com/System/Asrock-Z390M-ITXac/103077]Asrock Z390M-ITX/ac[/url]

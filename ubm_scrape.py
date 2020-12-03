@@ -20,7 +20,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
-driver.get("https://cpu.userbenchmark.com/Software")
+#driver.get("https://cpu.userbenchmark.com/Software")
 
 
 print('hell yea')

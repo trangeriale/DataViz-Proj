@@ -35,22 +35,22 @@ user_count = 0
 
 #logic: click on each user
 #rmb to add longer range
-for i in range(30):
-	driver.implicitly_wait(12000)
+for i in range(100):
+	driver.get("https://cpu.userbenchmark.com/Software")
+	driver.implicitly_wait(120000)
 	driver.refresh()
-	driver.implicitly_wait(12000)
+	driver.implicitly_wait(120000)
 	
 	driver.find_element_by_class_name('bglink').click()
 
-	driver.implicitly_wait(36000)
-	driver.refresh()
-	driver.implicitly_wait(50000)
+	driver.implicitly_wait(360000)
+	driver.implicitly_wait(120000)
 	#start getting the data
-	copy_button = WebDriverWait(driver, 10000).until(EC.presence_of_element_located((By.CLASS_NAME, "fa-copy")))
+	copy_button = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.CLASS_NAME, "fa-copy")))
 	#filtered_list = [i for (i, v) in zip(list_a, filter) if v]
 
 	driver.find_element_by_class_name("fa-copy").click()
-	driver.implicitly_wait(1000)
+	driver.implicitly_wait(100000)
 
 	#user computer info
 	user_comp_info = driver.find_element_by_id("modalTextArea").text.split('\n')
@@ -116,7 +116,6 @@ for i in range(30):
 	user_count += 1
 	print("User count is: %d" % user_count)
 	driver.implicitly_wait(12000)
-	driver.back()
 	driver.implicitly_wait(12000)
 	#driver.refresh()
 	#driver.implicitly_wait(3000)
@@ -125,6 +124,8 @@ for i in range(30):
 
 user_comp_data = {'UserID' : UserID, 'gameRating' : game_rating, 'desktopRating' : desktop_rating , 'workRating' : work_rating, 'CPU' : CPU, 'CPURating': CPU_rating, 'GPU' : GPU, 'GPURating' : GPU_rating}
 comp_dataset = pd.DataFrame(user_comp_data)
+
+comp_dataset = pd.DataFrame.drop_duplicates(comp_dataset, subset=["UserID"])
 
 print(comp_dataset)
 comp_dataset.to_csv('user_cpu_gpu.csv', mode= 'a', header = False)

@@ -35,7 +35,7 @@ user_count = 0
 
 #logic: click on each user
 #rmb to add longer range
-for i in range(100):
+for i in range(200):
 	driver.get("https://cpu.userbenchmark.com/Software")
 	driver.implicitly_wait(120000)
 	driver.refresh()
@@ -76,18 +76,18 @@ for i in range(100):
 	user_ID = user_ID_and_rating[0][(len(prefix_ID)):(0-len(suffix_ID))]
 	
 	UserID.append(user_ID)
-	print(user_ID)
+	#print(user_ID)
 
 	user_game_rating = user_ID_and_rating[2][:-1]
-	print(user_game_rating)
+	#print(user_game_rating)
 	game_rating.append(user_game_rating)
 
 	user_desktop_rating = user_ID_and_rating[4][:-1]
-	print(user_desktop_rating)
+	#print(user_desktop_rating)
 	desktop_rating.append(user_desktop_rating)
 
 	user_work_rating = user_ID_and_rating[6][:-6]
-	print(user_work_rating)
+	#print(user_work_rating)
 	work_rating.append(user_work_rating)
 
 	#user CPU
@@ -95,8 +95,8 @@ for i in range(100):
 	user_CPU = user_CPU_string[(user_CPU_string.find("]")+1):(user_CPU_string.find("[/url]"))]
 	user_CPU_rating = user_CPU_string[(user_CPU_string.find("[b]") + 3):(user_CPU_string.find("[/b]"))]
 
-	print(user_CPU)
-	print(user_CPU_rating)
+	#print(user_CPU)
+	#print(user_CPU_rating)
 
 	CPU.append(user_CPU)
 	CPU_rating.append(user_CPU_rating)
@@ -106,8 +106,8 @@ for i in range(100):
 	user_GPU = user_GPU_string[(user_GPU_string.find("]")+1):(user_GPU_string.find("[/url]"))]
 	user_GPU_rating = user_GPU_string[(user_GPU_string.find("[b]") + 3):(user_GPU_string.find("[/b]"))]
 	
-	print(user_GPU)
-	print(user_GPU_rating)
+	#print(user_GPU)
+	#print(user_GPU_rating)
 
 	GPU.append(user_GPU)
 	GPU_rating.append(user_GPU_rating)

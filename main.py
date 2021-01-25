@@ -127,8 +127,8 @@ comp_dataset = pd.DataFrame(user_comp_data)
 
 comp_dataset = pd.DataFrame.drop_duplicates(comp_dataset, subset=["UserID"])
 
-print(comp_dataset)
-comp_dataset.to_csv('user_cpu_gpu.csv', mode= 'a', header = False)
+#print(comp_dataset)
+comp_dataset.to_csv('comp.csv', mode= 'a', header = False)
 
 
 

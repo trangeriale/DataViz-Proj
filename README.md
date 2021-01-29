@@ -6,11 +6,5 @@ The project is to be expanded to cover other PC parts and how each combination i
 
 I used Selenium for data extraction and Seaborn for visualization.
 
-## How to run
-```
-git checkout fire-fox version
-py main.py
-```
-
 Please feel free to fork and give any comments. My email is trang.le@berkeley.edu :)
 

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>Document</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+
+<body>
+
+    <script>
+
+        Promise.all([
+            d3.csv("https://raw.githubusercontent.com/trangeriale/DataViz-Proj/getPriceData/cpugpu.csv"),
+            d3.csv("https://raw.githubusercontent.com/trangeriale/DataViz-Proj/getPriceData/cpu_price.csv"),
+            d3.csv("https://raw.githubusercontent.com/trangeriale/DataViz-Proj/getPriceData/gpu_price.csv")
+        ]).then((files) => {
+            cpugpu = files[0]
+            cpuPrice = files[1]
+            gpuPrice = files[2]
+            vizData(cpugpu, cpuPrice, gpuPrice)
+        }).catch((error) => {
+            console.log(error)
+        })
+
+        const processRating = (rating) => {
+            return parseFloat(rating.slice(0, rating.length - 1))
+        }
+
+        //onsole.log(processRating("50%"))
+        function vizData(ratingData, priceCPU, priceGPU) {
+            /*
+            create two axis with work perform from cpugpu set
+            price from the price set
+            half circle based on rating for each type of device
+            how do I query the brand and color code
+            case switch? oh or filter func js
+            */
+
+            const CPUList = ["AMD Ryzen", "AMD", "Intel"]
+            const GPUList = ["AMD", "Intel", "Nvidia"]
+            const CPUScale = d3.scaleOrdinal()
+                .domain(CPUList)
+                .range(["#C4663A", "red", "#2B66AF"])
+            const GPUScale = d3.scaleOrdinal()
+                .domain(GPUList)
+                .range(["#FFFFFF", "#2C66AF", "#76B900"])
+
+
+            const categorizeDevice = (name, list) => {
+                return list.filter((d) => name.includes(d))[0]
+            }
+
+            //console.log(categorizeDevice("AMD Ryzen 9 3900x", CPUList))
+            const priceGPUObj = {}
+            for (let price in priceGPU) {
+                if (price == priceGPU.length - 1) {
+                    break
+                }
+                let priceStr = priceGPU[price].eBayAveragePriceNovember
+                priceGPUObj[priceGPU[price].GPU] = parseInt(priceStr.slice(1).replace(',', ''))
+            }
+
+            //console.log(priceGPUObj)
+
+            const priceCPUObj = {}
+            for (let price in priceCPU) {
+                //console.log(priceCPU[price])
+                if (price == priceCPU.length - 1) {
+                    break
+                }
+                let priceStr = priceCPU[price].Price
+                //onsole.log(priceStr)
+                priceCPUObj[priceCPU[price].CPU] = parseInt(priceStr.slice(1).replace(',', ''))
+            }
+
+            //console.log(priceCPUObj)
+            const height = 1200
+            const width = 3000
+            const m = 40
+            //convert rating data from % string to int and find max and min
+
+            // const workPerfScale = d3.scaleLinear().domain(workPerformance)
+            //     .range([height - m, m])
+            //     .nice()
+
+            // const priceG = d3.extent(priceGPU, d => parseInt(d.eBayAveragePriceNovember.slice(1).replace(',', '')))
+            // //console.log(priceG)
+
+            // const priceC = d3.extent(priceCPU, d => parseInt(d.Price.slice(1)))
+            // //console.log(priceC)
+
+            // const priceBuild = [priceG[0] + priceC[0], priceG[1] + priceC[1]]
+            // //console.log(priceBuild)
+            // //const priceScale = d3.scaleLinear().domain(priceBuild).range([m / 4, width - 5 * m / 4]).nice()
+            ratingData.forEach(d => {
+                if (priceGPUObj[d.GPU] && priceCPUObj[d.CPU]) {
+                    d.GPUPrice = priceGPUObj[d.GPU]
+                    //console.log("GPU Price")
+
+                    d.CPUPrice = priceCPUObj[d.CPU]
+                    //console.log(d.CPUPrice)
+                }
+            })
+            const workPerformance = d3.extent(ratingData, d => {
+                if (d.GPUPrice && d.CPUPrice) {
+                    return processRating(d.workRating)
+                }
+            })
+            //const meanWorkPerf = d3.quantile
+            const workRatingArray = ratingData.map((d) => processRating(d.workRating))
+            //console.log(workRatingArray)
+
+            const percentile90 = d3.quantile(workRatingArray, 0.95)
+            //console.log(percentile90)
+
+            // const workPerfScale = d3.scaleLinear()
+            //     .domain([d3.quantile(workRatingArray, 0),
+            //     d3.quantile(workRatingArray, 0.95),
+            //     d3.quantile(workRatingArray, 1)])
+            //     .range([height - m, height / 5, m])
+            //     .nice()
+            const workPerfScale = d3.scaleLinear().domain(workPerformance)
+                .range([height - m, m])
+
+            console.log("work", workPerformance)
+
+            const priceDomain = d3.extent(ratingData, d => d.CPUPrice + d.GPUPrice)
+            console.log(priceDomain)
+
+            const priceScale = d3.scaleLinear().domain(priceDomain).range([m / 4, width - 5 * m / 4]).nice()
+
+            console.log(workPerformance)
+            d3.select("body")
+                .append("svg")
+                .attr("class", "pcviz")
+                .attr("viewBox", `0 0 ${width} ${height}`)
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", `translate(${m},${0})`)
+                .call(d3.axisLeft(workPerfScale)
+                    .tickSize(5)
+                    .ticks(15, "+f")
+                    .tickFormat(d => d))
+                .append("g")
+                .attr("transform", `translate(${0},${height - m})`)
+                .call(d3.axisBottom(priceScale)
+                    .tickSize(5)
+                    .ticks(20)
+                    .tickFormat(d => d))
+
+
+
+            //now draw the arc bitchesssss
+            /*
+            what I need for the arc:
+            M workRating - radius, price A cpuRating, cpuRating (as the radius)
+                rotation(?still dont get why it didn't work) 0 0 0 workRating + 2*radius (the end point)
+            1. the position to start drawing
+
+            2. need rating for the arc radius.
+            position: 
+            */
+
+
+
+            const gap = 2;
+            d3.select("svg.pcviz")
+                .selectAll("path")
+                .data(ratingData)
+                .enter()
+                .append("path")
+                .on("click", (d) => console.log(d))
+                .attr("class", "datapoint")
+                .attr("d", (d) => {
+                    let pGPU;
+                    let radiusLeft;
+                    let radiusRight;
+                    if (priceGPUObj[d.GPU] && priceCPUObj[d.CPU]) {
+                        pGPU = priceScale(priceGPUObj[d.GPU] + priceCPUObj[d.CPU])
+                        //console.log(pGPU)
+                        radiusLeft = (processRating(d.GPURating)) / 15
+
+                        //console.log("radius", rea)
+                        let y = workPerfScale(processRating(d.workRating))
+                        //console.log("y", y)
+                        let path = `M ${pGPU + m} ${y - radiusLeft} A ${radiusLeft} ${radiusLeft} 0 0 0 ${pGPU + m} ${y + radiusLeft}`
+                        return path
+                    }
+                })
+                .attr("fill", (d) => GPUScale(categorizeDevice(d.GPU, GPUList)))
+                .attr("stroke", "black")
+                .append("line")
+
+            const cpu = d3.select("svg.pcviz").append("g").attr("class", "cpuViz")
+
+
+            cpu.selectAll("path")
+                .data(ratingData)
+                .enter()
+                .append("path")
+                .on("click", (d) => console.log(d))
+                .attr("d", (d) => {
+                    if (priceGPUObj[d.GPU] && priceCPUObj[d.CPU]) {
+                        pGPU = priceScale(priceGPUObj[d.GPU] + priceCPUObj[d.CPU])
+                        radiusRight = (processRating(d.CPURating)) / 10
+                        let y = workPerfScale(processRating(d.workRating))
+                        //console.log(y)
+                        let path = `M ${pGPU + m + gap} ${y - radiusRight} A ${radiusRight} ${radiusRight} 180 0 1 ${pGPU + m + gap} ${y + radiusRight}`
+                        //path = "M 50,0 A 25 25 0 0 0 50 50"
+                        return path
+                    }
+                })
+                .attr("fill", (d) => CPUScale(categorizeDevice(d.CPU, CPUList)))
+                .attr("stroke", "black")
+        }
+
+        //dataPoint.forEach((d) => d.addEventListener("click", (d) => console.log(d)))
+    </script>
+</body>
+
+</html>

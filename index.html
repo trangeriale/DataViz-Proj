@@ -17,8 +17,8 @@
 
         Promise.all([
             d3.csv("cpugpu.csv"),
-            d3.csv("../cpu_price.csv"),
-            d3.csv("../gpu_price.csv")
+            d3.csv("cpu_price.csv"),
+            d3.csv("gpu_price.csv")
         ]).then((files) => {
             cpugpu = files[0]
             cpuPrice = files[1]

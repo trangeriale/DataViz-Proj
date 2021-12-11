@@ -8,10 +8,48 @@
     <link rel="stylesheet" href="index.css">
     <title>Document</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400&display=swap" rel="stylesheet">
 </head>
 
 
 <body>
+    <section>
+        <h1>VISUALIZATION OF DIFFERENT CPU AND GRAPHIC CARDS COMBINATION</h1>
+        <subsection id="controller">
+            <form class="filter">
+                <label for="controller">Filter GPU</label>
+                <div class="inputfield">
+                    <input type="checkbox" id="Intel" name="GPU" value="Intel" checked>
+                    <label for="Intel">Intel</label>
+                </div>
+                <div class="inputfield">
+                    <input type="checkbox" id="NVIDIA" name="GPU" value="NVIDIA" checked>
+                    <label for="NVIDIA">NVIDIA</label>
+                </div>
+                <div class="inputfield">
+                    <input type="checkbox" id="AMD" name="GPU" value="AMD" checked>
+                    <label for="AMD">AMD</label>
+                </div>
+            </form>
+            <form class="filter">
+                <label for="controller">Filter CPU</label>
+                <div class="inputfield">
+                    <input type="checkbox" id="Intel" name="GPU" value="Intel" checked>
+                    <label for="Intel">Intel</label>
+                </div>
+                <div class="inputfield">
+                    <input type="checkbox" id="NVIDIA" name="GPU" value="NVIDIA" checked>
+                    <label for="NVIDIA">NVIDIA</label>
+                </div>
+                <div class="inputfield">
+                    <input type="checkbox" id="AMD" name="GPU" value="AMD" checked>
+                    <label for="AMD">AMD</label>
+                </div>
+            </form>
+        </subsection>
+    </section>
 
     <script>
 
@@ -81,8 +119,17 @@
 
             //console.log(priceCPUObj)
             const height = 1200
-            const width = 3000
-            const m = 40
+            let width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+
+            //change dashboard according to window's size
+            window.addEventListener('resize', () => {
+                width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+                //console.log(width)
+            })
+
+            const m = 60
+            const controllerH = 0
+            const controllerW = 600
             //convert rating data from % string to int and find max and min
 
             // const workPerfScale = d3.scaleLinear().domain(workPerformance)
@@ -131,31 +178,35 @@
             console.log("work", workPerformance)
 
             const priceDomain = d3.extent(ratingData, d => d.CPUPrice + d.GPUPrice)
-            console.log(priceDomain)
+            //console.log(priceDomain)
 
             const priceScale = d3.scaleLinear().domain(priceDomain).range([m / 4, width - 5 * m / 4]).nice()
 
-            console.log(workPerformance)
-            d3.select("body")
+            //console.log(workPerformance)
+            const dashBoard = d3.select("body")
                 .append("svg")
                 .attr("class", "pcviz")
-                .attr("viewBox", `0 0 ${width} ${height}`)
+                .attr("viewBox", `0 -${controllerH} ${width} ${height + controllerH}`)
                 .attr("width", width)
-                .attr("height", height)
-                .append("g")
+                .attr("height", height + controllerH)
+
+            dashBoard.append("g")
+                .attr("id", "y-axis")
                 .attr("transform", `translate(${m},${0})`)
                 .call(d3.axisLeft(workPerfScale)
                     .tickSize(5)
                     .ticks(15, "+f")
                     .tickFormat(d => d))
                 .append("g")
+                .attr("id", "x-axis")
                 .attr("transform", `translate(${0},${height - m})`)
                 .call(d3.axisBottom(priceScale)
                     .tickSize(5)
                     .ticks(20)
                     .tickFormat(d => d))
 
-
+            dashBoard.selectAll("g.tick text")
+                .attr("font-size", "1.5em")
 
             //now draw the arc bitchesssss
             /*

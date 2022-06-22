@@ -1,21 +1,29 @@
+body {
+    font-family: 'Roboto Mono', monospace;
+}
 section {
     display: flex;
     flex-direction: column;
     align-items: center;
     font-family: 'Roboto Mono', monospace;
+    justify-content: center;
+    text-align: center;
 }
+
 form.filter {
     padding: 0.5em;
     display: flex;
     flex-direction: column;
     height: 10em;
     justify-content: space-between;
+    text-align: left;
 }
 
-subsection#controller {
+.controller {
     display: flex;
     flex-direction: row;
     width: 40vw;
+    margin: 1em 0;
     justify-content: space-between;
 }
 
@@ -37,4 +45,15 @@ label {
 form > label {
     font-weight: 400;
     font-size: 1.5em;
+}
+
+section#dataDetail {
+    display: flex;
+    flex-direction: row;
+}
+
+@media all and (max-width: 768px) {
+    svg.pcviz {
+        width: calc(100vw - 10px);
+    }
 }

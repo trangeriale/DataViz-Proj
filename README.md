@@ -6,5 +6,5 @@ The project is to be expanded to cover other PC parts and how each combination i
 
 I used Selenium for data extraction and Seaborn for visualization.
 
-Please feel free to fork and give any comments. My email is trang.le@berkeley.edu :)
+Please feel free to fork and give any comments. My email is trangeriale@gmail.com :)
 

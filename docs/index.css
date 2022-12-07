@@ -1,6 +1,7 @@
 body {
     font-family: 'Roboto Mono', monospace;
 }
+
 section {
     display: flex;
     flex-direction: column;
@@ -8,6 +9,10 @@ section {
     font-family: 'Roboto Mono', monospace;
     justify-content: center;
     text-align: center;
+}
+
+#data-detail {
+    flex-direction: row;
 }
 
 form.filter {
@@ -42,7 +47,7 @@ label {
     padding-left: 0.5em;
 }
 
-form > label {
+form>label {
     font-weight: 400;
     font-size: 1.5em;
 }
@@ -56,4 +61,38 @@ section#dataDetail {
     svg.pcviz {
         width: calc(100vw - 10px);
     }
+}
+
+.legend {
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+}
+
+.legend-layout {
+    width: 7rem;
+}
+
+.nvidia {
+    background-color: #76b900;
+}
+
+.intel-gpu {
+    background-color: #5AC4F8;
+}
+
+.intel-cpu {
+    background-color: #015FF5;
+}
+
+.amd-ryzen {
+    background-color: #C4663A;
+}
+
+.amd-non-ryzen {
+    background-color: black;
+}
+
+.amd-cpu {
+    background-color: white;
 }

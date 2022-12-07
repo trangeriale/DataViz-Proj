@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="./utilities.css">
     <title>Document</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,12 +56,31 @@
             </form>
         </div>-->
     <section>
-        <h1>VISUALIZATION OF DIFFERENT CPU AND GRAPHIC CARDS COMBINATION</h1>
+        <h3 tabindex=0>VISUALIZATION OF DIFFERENT CPU AND GRAPHIC CARDS COMBINATION</h3>
         <!---->
-        <h2>Click on at most 3 datapoints to compare</h2>
+        <h4 tabindex=0>Click on at most 3 datapoints to compare</h4>
     </section>
-    <section id="dataDetail">
+    <section tabindex=0 id="data-detail">
     </section>
+    <div id="data-detail"></div>
+    <div id="main-viz" class="flex-row-reverse">
+        <section class="margin-inline-md flex-column align-items-flex-start justify-content-flex-start">
+            <h2>Legend</h2>
+            <div class="legend-layout flex-row justify-content-space-between align-items-center">
+                <div class="legend nvidia"></div>
+                <p>NVIDIA</p>
+            </div>
+            <div class="legend-layout flex-row justify-content-space-between align-items-center">
+                <div class="legend amd-ryzen"></div>
+                <p>AMD Ryzen</p>
+            </div>
+            <div class="legend-layout flex-row justify-content-space-between align-items-center">
+                <div class="legend intel-cpu"></div>
+                <p>Intel CPU</p>
+            </div>
+        </section>
+    </div>
+
     <script src="mainViz.js"></script>
 </body>
 
